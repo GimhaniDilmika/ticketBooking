@@ -2,7 +2,8 @@ import React from "react";
 
 export default function Footer() {
   return (
-    <footer className="w-full bg-black text-gray-300 px-6 md:px-16 lg:px-24 xl:px-44 py-12 mt-20">
+    <footer className="w-full bg-[#1a1a1a] text-gray-300 px-6 md:px-16 lg:px-24 xl:px-44 py-12 mt-20">
+
       
       {/* TOP SECTION */}
       <div className="flex flex-col md:flex-row justify-between gap-12">
