@@ -14,13 +14,7 @@ const HeroSection = () => {
       style={{ backgroundImage: `url(${bgImage})` }}   // ✅ Background applied inline
     >
       {/* Marvel Logo */}
-     <img 
- src={assets.marvelLogo} 
-  alt="Marvel Logo"
-   className="h-50 w-60"
-/>
-
-
+      <img src={assets.marvelLogo} alt="Marvel Logo" className="max-h-11 lg:h-11 mt-20" />
 
       {/* Title */}
       <h1 className="text-5xl md:text-[70px] md:leading-[4.5rem] font-semibold max-w-[1100px] text-white">
@@ -46,13 +40,12 @@ const HeroSection = () => {
 
       {/* Button */}
       <button
-  onClick={() => navigate('/movies')}
-  className="flex items-center gap-1 px-6 py-3 text-sm bg-[#B30000] hover:bg-[#8A0000] transition rounded-full font-medium cursor-pointer text-white"
->
-  Explore Movies
-  <ArrowRight className="w-5 h-5" />
-</button>
-
+        onClick={() => navigate('/movies')}
+        className="flex items-center gap-1 px-6 py-3 text-sm bg-primary hover:bg-primary-dull transition rounded-full font-medium cursor-pointer text-white"
+      >
+        Explore Movies
+        <ArrowRight className="w-5 h-5" />
+      </button>
     </div>
   )
 }
