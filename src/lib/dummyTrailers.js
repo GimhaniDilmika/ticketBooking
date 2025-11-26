@@ -1,3 +1,4 @@
+// src/lib/dummyTrailers.js
 import sigourney from "../assets/sigourney.png";
 import stephen from "../assets/stephen.png";
 import zoe from "../assets/zoe.png";
@@ -17,7 +18,6 @@ export const dummyTrailers = [
       "https://image.tmdb.org/t/p/w500/ulzhLuWrPK07P1YkdWQLZnQh1JL.jpg",
 
     casts: [
-     
       {
         name: "Chris Evans",
         profile_path:
@@ -29,35 +29,41 @@ export const dummyTrailers = [
           "https://image.tmdb.org/t/p/w185/6NsMbJXRlDZuDzatN2akFdGuTvx.jpg",
       },
     ],
+
+    // ✅ show.dateTime / movie.dateTime will come from here
+    dateTime: {
+      "2025-07-24": ["10:00", "13:00"],
+      "2025-07-25": ["11:00", "15:00"],
+      "2025-07-26": ["09:30", "14:30"],
+      "2025-07-27": ["10:00"],
+    },
   },
 
-{
-  id: 2,
-  title: "Avatar: The Way of Water",
-  release_date: "2022-12-16",
-  genres: [{ name: "Adventure" }, { name: "Fantasy" }],
-  runtime: 192,
-  vote_average: 7.7,
-  backdrop_path:
-    "https://image.tmdb.org/t/p/w500/94xxm5701CzOdJdUEdIuwqZaowx.jpg",
-
- casts: [
   {
-    name: "Sigourney Weaver",
-    profile_path: sigourney,
-  },
-  {
-    name: "Stephen Lang",
-    profile_path: stephen,
-  },
-  {
-    name: "Zoe Saldaña",
-    profile_path: zoe,
-  },
-],
+    id: 2,
+    title: "Avatar: The Way of Water",
+    release_date: "2022-12-16",
+    genres: [{ name: "Adventure" }, { name: "Fantasy" }],
+    runtime: 192,
+    vote_average: 7.7,
+    backdrop_path:
+      "https://image.tmdb.org/t/p/w500/94xxm5701CzOdJdUEdIuwqZaowx.jpg",
 
-},
-
+    casts: [
+      {
+        name: "Sigourney Weaver",
+        profile_path: sigourney,
+      },
+      {
+        name: "Stephen Lang",
+        profile_path: stephen,
+      },
+      {
+        name: "Zoe Saldaña",
+        profile_path: zoe,
+      },
+    ],
+  },
 
   {
     id: 3,
@@ -72,15 +78,15 @@ export const dummyTrailers = [
     casts: [
       {
         name: "Leonardo DiCaprio",
-        profile_path:Leo,
+        profile_path: Leo,
       },
       {
         name: "Joseph Gordon-Levitt",
-        profile_path:Joseph,
+        profile_path: Joseph,
       },
       {
         name: "Tom Hardy",
-        profile_path:Tom,
+        profile_path: Tom,
       },
     ],
   },

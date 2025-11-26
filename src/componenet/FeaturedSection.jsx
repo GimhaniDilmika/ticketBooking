@@ -82,10 +82,12 @@ const FeaturedSection = () => {
         </button>
       </div>
 
-      <BlurCircle top="0" right="-80px" />
+      
+      
 
       {/* Trailers section */}
       <TrailerSection />
+      <BlurCircle bottom="50px" right="50px" />
     </div>
   );
 };
