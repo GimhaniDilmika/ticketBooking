@@ -1,25 +1,33 @@
+// src/pages/MovieDetails.jsx
 import React, { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import { dummyTrailers } from "../lib/dummyTrailers";
 import BlurCircle from "../componenet/BlurCircle";
 import { Heart, StarIcon, PlayCircleIcon } from "lucide-react";
 import timeFormat from "../lib/timeFormat";
+import DateSelect from "../componenet/DateSelect";
+import Loading from "../componenet/Loading";        // 👈 spinner component
+import MovieCard from "../componenet/MoveCard";    // 👈 if you have this
 
 const MovieDetails = () => {
   const { id } = useParams();
+  const navigate = useNavigate();
+
   const [show, setShow] = useState(null);
 
   useEffect(() => {
     const movie = dummyTrailers.find((m) => String(m.id) === String(id));
-    if (movie) setShow({ movie });
+    if (movie) {
+      setShow({
+        movie,
+        dateTime: movie.dateTime, // used by <DateSelect />
+      });
+    }
+    window.scrollTo(0, 0); // go to top when page opens
   }, [id]);
 
   if (!show) {
-    return (
-      <div className="min-h-[60vh] flex items-center justify-center text-gray-400">
-        Loading...
-      </div>
-    );
+    return <Loading />; // 👈 use spinner instead of plain text
   }
 
   const movie = show.movie;
@@ -29,14 +37,18 @@ const MovieDetails = () => {
   const runtime = movie.runtime ? timeFormat(movie.runtime) : "";
   const rating = movie.vote_average?.toFixed(1) ?? "N/A";
 
+  // movies for "You May Also Like" (exclude current movie)
+  const relatedMovies = dummyTrailers
+    .filter((m) => m.id !== movie.id)
+    .slice(0, 4);
+
   return (
     <div className="px-6 md:px-16 lg:px-32 pt-40 pb-16 text-white relative">
-
       {/* 🔥 Red Gradient Background */}
       <div className="absolute top-0 right-0 w-[600px] h-[600px] bg-red-600/30 blur-[150px] rounded-full" />
 
+      {/* MAIN TOP SECTION */}
       <div className="flex flex-col md:flex-row gap-10 max-w-6xl mx-auto relative">
-        
         {/* Poster */}
         <img
           src={movie.backdrop_path}
@@ -73,10 +85,11 @@ const MovieDetails = () => {
               <PlayCircleIcon className="w-5 h-5" />
               Watch Trailer
             </button>
-          <button className="px-10 py-3 text-sm bg-red-500 hover:bg-red-600 transition rounded-full font-medium">
-             Buy Tickets
-          </button>
 
+            {/* 🔴 Buy Ticket button */}
+            <button className="px-10 py-3 text-sm bg-red-500 hover:bg-red-600 transition rounded-full font-medium">
+              Buy Tickets
+            </button>
 
             <button className="bg-gray-700 p-3 rounded-full hover:bg-gray-600 transition">
               <Heart className="w-5 h-5" />
@@ -105,8 +118,32 @@ const MovieDetails = () => {
               ))}
             </div>
           </div>
-
         </div>
+      </div>
+
+      {/* 🔽 DATE SELECT SECTION */}
+      <DateSelect dateTime={show.dateTime || {}} id={id} />
+
+      {/* YOU MAY ALSO LIKE */}
+      <p className="text-lg font-medium mt-20 mb-8">You May Also Like</p>
+
+      <div className="flex flex-wrap max-sm:justify-center gap-8">
+        {relatedMovies.map((m, index) => (
+          <MovieCard key={index} movie={m} />
+        ))}
+      </div>
+
+      {/* SHOW MORE BUTTON */}
+      <div className="flex justify-center mt-20">
+        <button
+          onClick={() => {
+            navigate("/movies");
+            window.scrollTo(0, 0);
+          }}
+          className="px-10 py-3 text-sm bg-red-500 hover:bg-red-600 transition rounded-md font-medium cursor-pointer"
+        >
+          Show more
+        </button>
       </div>
     </div>
   );
