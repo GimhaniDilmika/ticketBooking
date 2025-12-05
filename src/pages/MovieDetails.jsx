@@ -6,8 +6,8 @@ import BlurCircle from "../componenet/BlurCircle";
 import { Heart, StarIcon, PlayCircleIcon } from "lucide-react";
 import timeFormat from "../lib/timeFormat";
 import DateSelect from "../componenet/DateSelect";
-import Loading from "../componenet/Loading";        // 👈 spinner component
-import MovieCard from "../componenet/MoveCard";    // 👈 if you have this
+import Loading from "../componenet/Loading";
+import MovieCard from "../componenet/MoveCard";
 
 const MovieDetails = () => {
   const { id } = useParams();
@@ -20,14 +20,14 @@ const MovieDetails = () => {
     if (movie) {
       setShow({
         movie,
-        dateTime: movie.dateTime, // used by <DateSelect />
+        dateTime: movie.dateTime,
       });
     }
-    window.scrollTo(0, 0); // go to top when page opens
+    window.scrollTo(0, 0);
   }, [id]);
 
   if (!show) {
-    return <Loading />; // 👈 use spinner instead of plain text
+    return <Loading />;
   }
 
   const movie = show.movie;
@@ -37,10 +37,21 @@ const MovieDetails = () => {
   const runtime = movie.runtime ? timeFormat(movie.runtime) : "";
   const rating = movie.vote_average?.toFixed(1) ?? "N/A";
 
-  // movies for "You May Also Like" (exclude current movie)
   const relatedMovies = dummyTrailers
     .filter((m) => m.id !== movie.id)
     .slice(0, 4);
+
+  // 👉 when user clicks "Buy Tickets"
+  const handleBuyTickets = () => {
+    // change hash (optional, same as in video)
+    window.location.hash = "dateSelect";
+
+    // scroll smoothly to the date section
+    const section = document.getElementById("dateSelect");
+    if (section) {
+      section.scrollIntoView({ behavior: "smooth", block: "start" });
+    }
+  };
 
   return (
     <div className="px-6 md:px-16 lg:px-32 pt-40 pb-16 text-white relative">
@@ -87,7 +98,10 @@ const MovieDetails = () => {
             </button>
 
             {/* 🔴 Buy Ticket button */}
-            <button className="px-10 py-3 text-sm bg-red-500 hover:bg-red-600 transition rounded-full font-medium">
+            <button
+              onClick={handleBuyTickets}
+              className="px-10 py-3 text-sm bg-red-500 hover:bg-red-600 transition rounded-full font-medium"
+            >
               Buy Tickets
             </button>
 
@@ -122,7 +136,9 @@ const MovieDetails = () => {
       </div>
 
       {/* 🔽 DATE SELECT SECTION */}
-      <DateSelect dateTime={show.dateTime || {}} id={id} />
+      <div id="dateSelect" className="mt-24">
+        <DateSelect dateTime={show.dateTime || {}} id={id} />
+      </div>
 
       {/* YOU MAY ALSO LIKE */}
       <p className="text-lg font-medium mt-20 mb-8">You May Also Like</p>
