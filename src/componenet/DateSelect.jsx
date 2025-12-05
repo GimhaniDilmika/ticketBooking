@@ -1,62 +1,121 @@
-import React, { useState } from "react";
-import BlurCircle from "./BlurCircle";
-import { ChevronLeftIcon, ChevronRightIcon } from "lucide-react";
+// src/componenet/DateSelect.jsx
+import React, { useState, useMemo } from "react";
+import { useNavigate } from "react-router-dom";
 
-const DateSelect = ({ dateTime = {}, id, onDateChange }) => {
-  const [selected, setSelected] = useState(null);
+const MONTHS = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
+
+function formatDate(dateStr) {
+  const d = new Date(dateStr);
+  if (isNaN(d.getTime())) return { day: dateStr, month: "" };
+
+  return {
+    day: d.getDate(),
+    month: MONTHS[d.getMonth()],
+  };
+}
+
+export default function DateSelect({ dateTime = {}, id }) {
+  const navigate = useNavigate();
+
+  // Get all available dates
+  const dateKeys = useMemo(() => Object.keys(dateTime), [dateTime]);
+
+  // User selections
+  const [selectedDate, setSelectedDate] = useState(null);
+  const [selectedTime, setSelectedTime] = useState(null);
+
+  // ------------------------------
+  //  BOOK NOW VALIDATION FUNCTION
+  // ------------------------------
+  const handleBookNow = () => {
+    if (!selectedDate) {
+      alert("❗ Please select a date first!");
+      return;
+    }
+    if (!selectedTime) {
+      alert("❗ Please select a time!");
+      return;
+    }
+
+    // Navigate to next page
+    navigate(
+      `/movies/${id}/seats?date=${encodeURIComponent(
+        selectedDate
+      )}&time=${encodeURIComponent(selectedTime)}`
+    );
+  };
 
   return (
-    <div id="dateSelect" className="pt-30">
-      <div className="flex flex-col md:flex-row items-center justify-between gap-10 relative p-8 bg-primary/10 border border-primary/20 rounded-lg">
-        
-        {/* Blur Background */}
-        <BlurCircle top="-100px" left="-100px" />
-        <BlurCircle top="100px" right="0px" />
+    <section
+      id="dateSelect"
+      className="mt-24 bg-[#201018] rounded-3xl px-8 py-10 max-w-6xl mx-auto"
+    >
+      {/* Top Row */}
+      <div className="flex items-center justify-between mb-8">
+        <h2 className="text-xl font-semibold">Choose Date & Time</h2>
 
-        <div>
-          <p className="text-lg font-semibold">Choose Date</p>
-
-          <div className="flex items-center gap-6 text-sm mt-5">
-            <ChevronLeftIcon width={28} />
-
-            <span className="grid grid-cols-3 md:flex flex-wrap md:max-w-lg gap-4">
-
-              {Object.keys(dateTime).map((date) => (
-                <button
-                  key={date}
-                  onClick={() => {
-                    setSelected(date);
-                    if (onDateChange) onDateChange(date, id);
-                  }}
-                  className={`flex flex-col items-center justify-center h-14 w-14 aspect-square rounded cursor-pointer ${
-                    selected === date
-                      ? "bg-primary text-white"
-                      : "border border-primary/70"
-                  }`}
-                >
-                  <span>{new Date(date).getDate()}</span>
-                  <span>
-                    {new Date(date).toLocaleDateString("en-US", {
-                      month: "short",
-                    })}
-                  </span>
-                </button>
-              ))}
-
-            </span>
-
-            <ChevronRightIcon width={28} />
-          </div>
-        </div>
-
-        {/* Book Now Button */}
-        <button className="px-8 py-3 bg-primary text-white rounded-md shadow-lg hover:bg-primary/80 transition">
+        <button
+          onClick={handleBookNow}
+          className="px-8 py-3 bg-red-500 hover:bg-red-600 rounded-md font-medium"
+        >
           Book Now
         </button>
-
       </div>
-    </div>
-  );
-};
 
-export default DateSelect;
+      {/* ----------------------- */}
+      {/*       DATE BUTTONS      */}
+      {/* ----------------------- */}
+      <p className="text-sm text-gray-300 mb-3">Available Dates</p>
+      <div className="flex items-center gap-3 mb-8 overflow-x-auto no-scrollbar">
+        {dateKeys.map((dateKey) => {
+          const { day, month } = formatDate(dateKey);
+          const isActive = selectedDate === dateKey;
+
+          return (
+            <button
+              key={dateKey}
+              onClick={() => {
+                setSelectedDate(dateKey);
+                setSelectedTime(null); // Reset time when date changes
+              }}
+              className={`flex flex-col items-center justify-center w-16 h-20 rounded-xl border text-sm
+                ${
+                  isActive
+                    ? "bg-red-500 border-red-500 text-white"
+                    : "bg-transparent border-red-500/40 text-gray-200 hover:bg-red-500/20"
+                }`}
+            >
+              <span className="text-lg font-semibold">{day}</span>
+              <span className="text-xs">{month}</span>
+            </button>
+          );
+        })}
+      </div>
+
+      {/* ----------------------- */}
+      {/*       TIME BUTTONS      */}
+      {/* ----------------------- */}
+      <p className="text-sm text-gray-300 mb-3">Available Times</p>
+      <div className="flex flex-wrap gap-3">
+        {(selectedDate ? dateTime[selectedDate] : []).map((time) => {
+          const isActive = selectedTime === time;
+
+          return (
+            <button
+              key={time}
+              onClick={() => setSelectedTime(time)}
+              className={`px-4 py-2 rounded-lg text-sm border
+                ${
+                  isActive
+                    ? "bg-red-500 border-red-500 text-white"
+                    : "bg-transparent border-red-500/40 text-gray-200 hover:bg-red-500/20"
+                }`}
+            >
+              {time}
+            </button>
+          );
+        })}
+      </div>
+    </section>
+  );
+}
