@@ -20,3 +20,88 @@ body{
   background-color: black;
 
 }
+.seatPage {
+  display: flex;
+  padding: 50px;
+  gap: 80px;
+  background: #000;
+  color: white;
+  min-height: 100vh;
+}
+
+/* LEFT BOX */
+.timingBox {
+  width: 260px;
+  padding: 25px;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 15px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.timingBox h3 {
+  font-size: 20px;
+  margin-bottom: 20px;
+}
+
+.timeItem {
+  background: #ff3d55;
+  padding: 12px 15px;
+  border-radius: 8px;
+  margin-bottom: 10px;
+  font-weight: 500;
+}
+
+/* CENTER CONTENT */
+.seatContent {
+  flex: 1;
+  text-align: center;
+}
+
+.heading {
+  font-size: 32px;
+  font-weight: bold;
+  margin-bottom: 10px;
+}
+
+.screen {
+  width: 80%;
+  height: 8px;
+  background: #ff3d55;
+  margin: 30px auto;
+  border-radius: 50%;
+  transform: translateY(10px);
+}
+
+/* SEATS */
+.seatGrid {
+  margin-top: 40px;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  align-items: center;
+}
+
+.seatRow {
+  display: flex;
+  gap: 12px;
+}
+
+.seat {
+  width: 40px;
+  height: 40px;
+  font-size: 12px;
+  border-radius: 6px;
+  background: transparent;
+  border: 1px solid #555;
+  color: white;
+  transition: 0.3s;
+}
+
+.seat:hover {
+  border-color: #ff3d55;
+}
+
+.activeSeat {
+  background: #ff3d55;
+  border-color: #ff3d55;
+}
