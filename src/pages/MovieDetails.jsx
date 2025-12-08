@@ -4,7 +4,8 @@ import { useParams, useNavigate } from "react-router-dom";
 import { dummyTrailers } from "../lib/dummyTrailers";
 import BlurCircle from "../componenet/BlurCircle";
 import { Heart, StarIcon, PlayCircleIcon } from "lucide-react";
-import timeFormat from "../lib/timeFormat";
+import { timeFormat } from "../lib/timeFormat";
+
 import DateSelect from "../componenet/DateSelect";
 import Loading from "../componenet/Loading";
 import MovieCard from "../componenet/MoveCard";
