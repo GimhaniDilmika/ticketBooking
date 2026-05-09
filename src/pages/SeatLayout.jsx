@@ -7,6 +7,7 @@ import Loading from "../componenet/Loading";
 
 import { dummyTrailers } from "../lib/dummyTrailers";
 import isoTimeFormat from "../lib/isoTimeFormat";
+import { addBooking } from "../lib/dummyBookingData";
 
 export default function SeatLayout() {
   const { id } = useParams();
@@ -22,7 +23,6 @@ export default function SeatLayout() {
   const [selectedTime, setSelectedTime] = useState(urlTime ? { time: urlTime } : null);
   const [selectedSeats, setSelectedSeats] = useState([]);
 
-  // layout groups
   const topRows = ["A", "B"];
   const splitRows = ["C", "D"];
   const midRows = ["E", "F", "G"];
@@ -31,9 +31,7 @@ export default function SeatLayout() {
   const leftCount = 9;
   const rightCount = 9;
   const singleCount = 9;
-
-  // --- NEW: center seats in split rows (1 seat in the middle) ---
-  const centerCount = 1; // set 0 to remove center seat
+  const centerCount = 1;
 
   useEffect(() => {
     const found = dummyTrailers.find(
@@ -85,21 +83,23 @@ export default function SeatLayout() {
     <div className="seat-row" key={row}>
       <div className="seat-label">{row}</div>
       <div className="seat-grid nine" role="group" aria-label={`Row ${row}`}>
-        {Array.from({ length: singleCount }, (_, i) => renderSeatButton(`${row}${i + 1}`))}
+        {Array.from({ length: singleCount }, (_, i) =>
+          renderSeatButton(`${row}${i + 1}`)
+        )}
       </div>
     </div>
   );
 
-  // --- UPDATED: split row now includes an optional center block (1 seat) ---
   const renderSplitRow = (row) => (
     <div className="seat-row split" key={row}>
       <div className="seat-label">{row}</div>
 
       <div className="seat-grid left" role="group" aria-label={`Row ${row} left`}>
-        {Array.from({ length: leftCount }, (_, i) => renderSeatButton(`${row}${i + 1}`))}
+        {Array.from({ length: leftCount }, (_, i) =>
+          renderSeatButton(`${row}${i + 1}`)
+        )}
       </div>
 
-      {/* center block (1 seat) */}
       {centerCount > 0 && (
         <div className="seat-grid center" role="group" aria-label={`Row ${row} center`}>
           {Array.from({ length: centerCount }, (_, c) =>
@@ -129,8 +129,9 @@ export default function SeatLayout() {
         ))}
       </div>
 
-      {/* center number (if any) */}
-      {centerCount > 0 && <div className="number-center">{leftCount + 1}</div>}
+      {centerCount > 0 && (
+        <div className="number-center">{leftCount + 1}</div>
+      )}
 
       <div className="seat-gap" />
       <div className="number-block right">
@@ -153,20 +154,22 @@ export default function SeatLayout() {
       return;
     }
 
-    navigate("/my-bookings", {
-      state: {
-        movieId: movie.id,
-        movieTitle: movie.title,
-        date: selectedDate,
-        time: selectedTime.time,
-        seats: selectedSeats,
-      },
+    addBooking({
+      movieId: movie.id,
+      movieTitle: movie.title,
+      posterPath: movie.backdrop_path,
+      runtime: `${movie.runtime} min`,
+      date: selectedDate,
+      time: selectedTime.time,
+      seats: selectedSeats,
     });
+
+    toast.success("Booking confirmed!");
+    navigate("/my-bookings");
   };
 
   return (
     <div className="min-h-screen seatpage relative text-white">
-      {/* blur circles */}
       <BlurCircle top="-260px" left="-220px" size={560} color="rgba(228,75,75,0.16)" />
       <BlurCircle top="-120px" right="-320px" size={480} color="rgba(20,40,80,0.14)" />
       <BlurCircle bottom="-40px" right="-40px" size={520} color="rgba(20,40,80,0.14)" />
@@ -175,7 +178,9 @@ export default function SeatLayout() {
       <BlurCircle top="-60px" left="40px" size={300} color="rgba(228,75,75,0.08)" />
 
       <div className="max-w-7xl mx-auto px-6 py-8">
-        <h1 className="text-2xl font-semibold text-center mt-12 mb-3">Select your seat</h1>
+        <h1 className="text-2xl font-semibold text-center mt-12 mb-3">
+          Select your seat
+        </h1>
 
         <div className="text-center text-gray-300 mb-4">
           <div className="text-lg font-medium">{movie.title}</div>
@@ -219,29 +224,33 @@ export default function SeatLayout() {
                   <div key={r} className="seat-row top">
                     <div className="seat-label">{r}</div>
                     <div className="seat-grid nine">
-                      {Array.from({ length: 9 }, (_, i) => renderSeatButton(`${r}${i + 1}`))}
+                      {Array.from({ length: 9 }, (_, i) =>
+                        renderSeatButton(`${r}${i + 1}`)
+                      )}
                     </div>
                   </div>
                 ))}
               </div>
 
-              <div className="split-rows mt-6">{splitRows.map((r) => renderSplitRow(r))}</div>
+              <div className="split-rows mt-6">
+                {splitRows.map((r) => renderSplitRow(r))}
+              </div>
 
               {renderNumberLineForSplit()}
 
-              {/* lower-grid: left (E/F/G) and right (H/I/J) aligned with the split right block */}
               <div className="lower-grid mt-6">
                 <div className="lower-left">
                   {midRows.map((r) => renderNineRow(r))}
                 </div>
 
-                {/* right column width is calculated to match the right split block width */}
                 <div className="lower-right">
                   {bottomRows.map((r) => (
                     <div className="seat-row" key={r}>
                       <div className="seat-label">{r}</div>
                       <div className="seat-grid nine right-aligned">
-                        {Array.from({ length: singleCount }, (_, i) => renderSeatButton(`${r}${i + 1}`))}
+                        {Array.from({ length: singleCount }, (_, i) =>
+                          renderSeatButton(`${r}${i + 1}`)
+                        )}
                       </div>
                     </div>
                   ))}
