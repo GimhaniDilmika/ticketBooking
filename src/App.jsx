@@ -12,8 +12,8 @@ import Footer from "./componenet/Footer";
 import AddShows from "./pages/Admin/AddShows";
 import ListShows from "./pages/Admin/ListShows";
 import ListBooking from "./pages/Admin/ListBooking";
-import Layout from "./pages/Admin/Layout";        // ✅ add this
-import Dashboard from "./pages/Admin/Dashboard";  // ✅ add this
+import Layout from "./pages/Admin/Layout";
+import Dashboard from "./pages/Admin/DashBoard"; 
 
 const App = () => {
   const location = useLocation();
@@ -25,13 +25,15 @@ const App = () => {
       {!isAdminRoute && <Navbar />}
 
       <Routes>
-        <Route path="/home" element={<Home />} />
+        <Route path="/" element={<Home />} />
         <Route path="/movies" element={<Movies />} />
         <Route path="/movies/:id" element={<MovieDetails />} />
         <Route path="/movies/:id/:date" element={<SeatLayout />} />
         <Route path="/my-bookings" element={<MyBookings />} />
         <Route path="/favorite" element={<Favorite />} />
-        <Route path="/admin/*" element={<Layout />}>
+
+        {/* ✅ No /* wildcard on parent */}
+        <Route path="/admin" element={<Layout />}>
           <Route index element={<Dashboard />} />
           <Route path="add-shows" element={<AddShows />} />
           <Route path="list-shows" element={<ListShows />} />

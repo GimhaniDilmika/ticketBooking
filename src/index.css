@@ -1,6 +1,10 @@
 @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@100..900&display=swap');
 @import "tailwindcss";
 
+@theme {
+  --color-primary: #e44b4b;
+}
+
 :root {
   --bg-dark: #050504;
   --accent: #e44b4b;
@@ -14,7 +18,6 @@
   --seat-border: rgba(255,255,255,0.06);
   --page-padding-top: 82px;
 
-  /* derived — used in grid-template-columns */
   --block-w: calc(9 * var(--seat-size) + 8 * var(--seat-col-gap));
   --center-w: calc(var(--seat-size) + 16px);
 }
@@ -27,7 +30,6 @@ body {
   font-family: 'Outfit', system-ui, -apple-system, sans-serif;
 }
 
-/* timings card */
 .timings-card {
   background: linear-gradient(180deg, rgba(255,255,255,0.01), rgba(255,255,255,0.003));
   border-radius: 14px;
@@ -52,7 +54,6 @@ body {
 
 .seat-grid-wrapper { max-width: 900px; margin: 0 auto; padding-bottom: 120px; }
 
-/* common row */
 .seat-row { display: flex; align-items: center; gap: var(--row-gap); margin: 5px 0; }
 .seat-label {
   width: var(--label-w);
@@ -65,7 +66,6 @@ body {
   flex-shrink: 0;
 }
 
-/* seat grids */
 .seat-grid { display: grid; gap: var(--seat-col-gap); align-items: center; }
 .seat-grid.nine  { grid-template-columns: repeat(9, var(--seat-size)); }
 .seat-grid.left  { grid-template-columns: repeat(9, var(--seat-size)); gap: var(--seat-col-gap); }
@@ -81,7 +81,6 @@ body {
 
 .seat-gap { width: var(--seat-gap); flex-shrink: 0; }
 
-/* seat button */
 .seat {
   width: var(--seat-size);
   height: var(--seat-size);
@@ -113,7 +112,6 @@ body {
   transform: translateY(-3px) scale(1.02);
 }
 
-/* number line */
 .seat-number-line { display: flex; align-items: center; gap: var(--row-gap); margin-top: 4px; }
 .number-block { display: grid; gap: var(--seat-col-gap); align-items: center; grid-auto-flow: column; }
 .seat-number { width: var(--seat-size); text-align: center; color: var(--muted); font-size: 11px; user-select: none; }
@@ -123,18 +121,6 @@ body {
 
 .seat-row.split .seat-grid.center .seat { transform: translateY(-4px); }
 
-/* ================================================================
-   LOWER GRID
-   5-column grid mirroring split rows exactly:
-     col1 = label (--label-w)
-     col2 = left block (--block-w)
-     col3 = center area (--center-w)
-     col4 = aisle (--seat-gap)
-     col5 = right block (--block-w)
-
-   lower-left  (E/F/G) → col 1/3  (label + left block)
-   lower-right (H/I/J) → col 5/6  (right block)
-================================================================ */
 .lower-grid {
   display: grid;
   grid-template-columns:
@@ -175,7 +161,6 @@ body {
   padding-right: 4px;
 }
 
-/* proceed bar */
 .proceed-bar {
   position: fixed;
   left: 50%; transform: translateX(-50%);
@@ -197,7 +182,6 @@ body {
   font-family: 'Outfit', sans-serif;
 }
 
-/* responsive */
 @media (max-width: 1100px) {
   :root {
     --seat-size: 26px;
