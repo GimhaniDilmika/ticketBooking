@@ -21,7 +21,9 @@ const AddShows = () => {
 
   const handleDateTimeAdd = () => {
     if (!dateTimeInput) return
-    const [date, time] = dateTimeInput.split("T")
+    const parts = dateTimeInput.split("T")
+    if (parts.length < 2) return
+    const [date, time] = parts
     if (!date || !time) return
 
     setDateTimeSelection((prev) => {
@@ -31,6 +33,8 @@ const AddShows = () => {
       }
       return prev
     })
+
+    setDateTimeInput("")
   }
 
   const handleRemoveTime = (date, time) => {
@@ -40,10 +44,7 @@ const AddShows = () => {
         const { [date]: _, ...rest } = prev
         return rest
       }
-      return {
-        ...prev,
-        [date]: filteredTimes,
-      }
+      return { ...prev, [date]: filteredTimes }
     })
   }
 
@@ -53,45 +54,38 @@ const AddShows = () => {
         Add <span className="text-primary">Shows</span>
       </h1>
 
-      {/* Now Playing Movies */}
-      <p className="mt-10 text-lg font-medium">Now Playing Movies</p>
+      <p className="mt-6 text-lg font-medium">Now Playing Movies</p>
       <div className="overflow-x-auto pb-4">
-        <div className="group flex flex-wrap gap-4 mt-4 w-max">
+        <div className="flex gap-4 mt-4 w-max">
           {nowPlayingMovies.map((movie) => (
             <div
               key={movie.id}
-              className={`relative max-w-40 cursor-pointer
-                group-hover:not-hover:opacity-40 hover:-translate-y-1
-                transition duration-300`}
               onClick={() => setSelectedMovie(movie.id)}
+              className={`relative w-36 cursor-pointer hover:-translate-y-1 transition duration-300`}
             >
-              <div className="relative rounded-lg overflow-hidden">
+              <div className="relative rounded-lg overflow-hidden w-36 h-52">
                 <img
                   src={movie.backdrop_path}
-                  alt=""
-                  className="w-full object-cover brightness-90"
+                  alt={movie.title}
+                  className="w-full h-full object-cover brightness-90"
                 />
-                <div className="text-sm flex items-center justify-between
-                  p-2 bg-black/70 w-full absolute bottom-0 left-0">
-                  <p className="flex items-center gap-1 text-gray-400">
-                    <StarIcon className="w-4 h-4 text-primary fill-primary" />
+                <div className="absolute bottom-0 left-0 w-full flex items-center justify-between px-2 py-1.5 bg-black/70 text-xs">
+                  <span className="flex items-center gap-1 text-gray-300">
+                    <StarIcon className="w-3 h-3 text-primary fill-primary" />
                     {movie.vote_average.toFixed(1)}
-                  </p>
-                  <p className="text-gray-300 text-sm">
-                    {movie.vote_count}k Votes
-                  </p>
+                  </span>
+                  <span className="text-gray-400">
+                    {movie.genres?.[0]?.name || 'Movie'}
+                  </span>
                 </div>
+                {selectedMovie === movie.id && (
+                  <div className="absolute inset-0 border-2 border-primary rounded-lg pointer-events-none" />
+                )}
               </div>
-              <div>
-                <p className="font-medium truncate mt-1">{movie.title}</p>
-                <p className="text-gray-400 text-sm">{movie.release_date}</p>
+              <div className="mt-1.5 px-0.5">
+                <p className="font-medium text-sm truncate">{movie.title}</p>
+                <p className="text-gray-400 text-xs mt-0.5">{movie.release_date}</p>
               </div>
-
-              {/* Selected indicator */}
-              {selectedMovie === movie.id && (
-                <div className="absolute inset-0 border-2 border-primary
-                  rounded-lg pointer-events-none" />
-              )}
             </div>
           ))}
         </div>
@@ -100,8 +94,7 @@ const AddShows = () => {
       {/* Show Price Input */}
       <div className="mt-8">
         <label className="block text-sm font-medium mb-2">Show Price</label>
-        <div className="inline-flex items-center gap-2 border
-          border-gray-600 px-3 py-2 rounded-md">
+        <div className="inline-flex items-center gap-2 border border-gray-600 px-3 py-2 rounded-md">
           <p className="text-gray-400 text-sm">{currency}</p>
           <input
             min={0}
@@ -109,35 +102,32 @@ const AddShows = () => {
             value={showPrice}
             onChange={(e) => setShowPrice(e.target.value)}
             placeholder="Enter show price"
-            className="outline-none bg-transparent"
+            className="outline-none bg-transparent text-white"
           />
         </div>
       </div>
 
       {/* Date & Time Selection */}
       <div className="mt-6">
-        <label className="block text-sm font-medium mb-2">
-          Select Date and Time
-        </label>
-        <div className="inline-flex gap-5 border border-gray-600
-          p-1 pl-3 rounded-lg">
+        <label className="block text-sm font-medium mb-2">Select Date and Time</label>
+        <div className="inline-flex gap-3 border border-gray-600 p-1 pl-3 rounded-lg items-center">
           <input
             type="datetime-local"
             value={dateTimeInput}
             onChange={(e) => setDateTimeInput(e.target.value)}
-            className="outline-none rounded-md bg-transparent"
+            className="outline-none rounded-md bg-transparent text-white text-sm datetime-input"
           />
           <button
+            type="button"
             onClick={handleDateTimeAdd}
-            className="bg-primary/80 text-white px-3 py-2 text-sm
-              rounded-lg hover:bg-primary cursor-pointer"
+            className="bg-primary/80 text-white px-4 py-2 text-sm rounded-lg hover:bg-primary cursor-pointer transition"
           >
             Add Time
           </button>
         </div>
       </div>
 
-      {/* Selected Date Times Display */}
+      {/* Selected DateTimes Display */}
       {Object.keys(dateTimeSelection).length > 0 && (
         <div className="mt-6 max-w-lg">
           {Object.entries(dateTimeSelection).map(([date, times]) => (
@@ -147,11 +137,11 @@ const AddShows = () => {
                 {times.map((time) => (
                   <span
                     key={time}
-                    className="flex items-center gap-2 bg-primary/10
-                      border border-primary/30 text-sm px-3 py-1 rounded-full"
+                    className="flex items-center gap-2 bg-primary/10 border border-primary/30 text-sm px-3 py-1 rounded-full"
                   >
                     {time}
                     <button
+                      type="button"
                       onClick={() => handleRemoveTime(date, time)}
                       className="text-gray-400 hover:text-red-400 text-xs"
                     >
@@ -168,8 +158,8 @@ const AddShows = () => {
       {/* Submit Button */}
       {selectedMovie && showPrice && Object.keys(dateTimeSelection).length > 0 && (
         <button
-          className="mt-8 bg-primary text-white px-6 py-2.5
-            rounded-lg hover:bg-primary/80 cursor-pointer transition"
+          type="button"
+          className="mt-8 bg-primary text-white px-6 py-2.5 rounded-lg hover:bg-primary/80 cursor-pointer transition"
         >
           Add Show
         </button>
