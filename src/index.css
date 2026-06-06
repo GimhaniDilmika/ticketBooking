@@ -6,6 +6,10 @@
 }
 
 :root {
+  font-family: "Outfit", sans-serif;
+  scrollbar-width: thin;
+  scrollbar-color: #787777 #1e1e1e;
+
   --bg-dark: #050504;
   --accent: #e44b4b;
   --accent-deep: #b93a3a;
@@ -23,11 +27,30 @@
 }
 
 body {
+  color: white;
   background: radial-gradient(700px 400px at 20% 10%, rgba(228,75,75,0.03), transparent 6%),
               var(--bg-dark);
   margin: 0;
   color: #e8edf0;
   font-family: 'Outfit', system-ui, -apple-system, sans-serif;
+}
+
+.no-scrollbar {
+  scrollbar-width: none;
+}
+
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+}
+
+input[type="datetime-local"] {
+  color-scheme: dark;
+}
+
+input[type="datetime-local"]::-webkit-calendar-picker-indicator {
+  filter: invert(1);
+  cursor: pointer;
 }
 
 .timings-card {
@@ -210,4 +233,21 @@ body {
   .lower-right { align-items: center; }
   .lower-right .seat-grid { justify-content: center; }
   .seat-label { width: 28px; font-size: 11px; }
+}
+.datetime-input {
+  color-scheme: dark;
+}
+
+.datetime-input::-webkit-calendar-picker-indicator {
+  filter: invert(1);
+  cursor: pointer;
+  opacity: 0.6;
+}
+
+.datetime-input::-webkit-datetime-edit {
+  color: white;
+}
+
+.datetime-input::-webkit-datetime-edit-fields-wrapper {
+  color: white;
 }
