@@ -35,3 +35,7 @@ desktop.ini
 *.njsproj
 *.sln
 *.sw?
+.env
+.env.*
+server/.env
+server/.env.*
